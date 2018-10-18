@@ -5,7 +5,12 @@ interface CreepMemory {
   role: string;
   room: string;
   working: boolean;
+  building: boolean;
+  upgrading: boolean;
+  target: RoomPosition
 }
+
+type Optional<T> = T | undefined
 
 interface Memory {
   uuid: number;
