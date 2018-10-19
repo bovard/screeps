@@ -10,6 +10,10 @@ interface CreepMemory {
   target: RoomPosition
 }
 
+declare const TYPE_HARVESTER = 'harvester';
+declare const TYPE_BUILDER = 'builder';
+declare const TYPE_UPGRADER = 'upgrader';
+
 type Optional<T> = T | undefined
 
 interface Memory {
