@@ -10,6 +10,15 @@ export class HQ {
             }).filter((structure: Structure) => Game.spawns[spawnName].pos.getRangeTo(structure.pos) < 20)
                 .map((structure: Structure) => (structure as StructureExtension).energyCapacity).reduce((a, b) => a + b);
     }
+    public static getAvaliableEnergy(spawnName: string) {
+        return Game.spawns[spawnName].energy +
+            Game.spawns[spawnName].room.find(FIND_STRUCTURES, {
+                filter: (structure: Structure) => {
+                    return structure.structureType === STRUCTURE_EXTENSION
+                }
+            }).filter((structure: Structure) => Game.spawns[spawnName].pos.getRangeTo(structure.pos) < 20)
+                .map((structure: Structure) => (structure as StructureExtension).energy).reduce((a, b) => a + b);
+    }
     public static spawn(): Optional<number> {
         const harvesters = [];
         const builders = [];
@@ -30,14 +39,25 @@ export class HQ {
 
         const spawnName = 'Spawn1';
 
+        if (harvesters.length == 0) {
+            this.spawnCreep(spawnName, [WORK, CARRY, MOVE], Constants.TYPE_HARVESTER)
+            this.printSpawnMessage(spawnName);
+            return;
+        }
+
         const maxCost = this.getMaxScreepCost(spawnName);
+        const avaliable = this.getAvaliableEnergy(spawnName);
         const body = [WORK, CARRY, MOVE];
         let cost = 200;
-        while (cost + 50 <= maxCost) {
+        while (cost + 100 <= maxCost) {
             body.push(WORK);
+            cost += 100;
+        }
+        while (cost + 50 <= maxCost) {
+            body.push(CARRY);
             cost += 50;
         }
-        console.log(`Max cost is ${maxCost} we are building ${cost}, ${body}`);
+        console.log(`Max cost is ${maxCost} (${avaliable} avaliable) we are building ${cost}, ${body}`);
         if (harvesters.length < 3) {
             this.spawnCreep(spawnName, body, Constants.TYPE_HARVESTER)
             this.printSpawnMessage(spawnName);
