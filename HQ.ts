@@ -21,13 +21,13 @@ export class HQ {
 
         const spawnName = 'Spawn1';
 
-        if (harvesters.length < 2) {
+        if (harvesters.length < 3) {
             this.spawnCreep(spawnName, [WORK, CARRY, MOVE], Constants.TYPE_HARVESTER)
             this.printSpawnMessage(spawnName);
-        } else if (upgraders.length < 1) {
+        } else if (upgraders.length < 2) {
             this.spawnCreep(spawnName, [WORK, CARRY, MOVE], Constants.TYPE_UPGRADER)
             this.printSpawnMessage(spawnName);
-        } else if (builders.length < 1) {
+        } else if (builders.length < 2) {
             this.spawnCreep(spawnName, [WORK, CARRY, MOVE], Constants.TYPE_BUILDER)
             this.printSpawnMessage(spawnName);
         }

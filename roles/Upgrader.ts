@@ -1,6 +1,6 @@
-import { Sources } from "../utils/Sources";
+import { BaseCreep } from "../BaseCreep";
 
-export class Upgrader {
+export class Upgrader extends BaseCreep {
     public static run(creep: Creep): Optional<number> {
         if (creep.memory.upgrading && creep.carry.energy === 0) {
             creep.memory.upgrading = false;
@@ -19,19 +19,7 @@ export class Upgrader {
                 return creep.moveTo(creep.room.controller, { visualizePathStyle: { stroke: '#ffffff' } });
             }
         } else if (creep.memory.upgrading === false) {
-            let target;
-            if (creep.memory.target !== undefined) {
-                const sources = creep.room.lookForAt(LOOK_SOURCES, creep.memory.target);
-                if (sources.length > 0) {
-                    target = sources[0];
-                } else {
-                    delete creep.memory.target;
-                }
-            }
-            if (target === undefined) {
-                target = Sources.getClosestSource(creep);
-                creep.memory.target = target.pos;
-            }
+            const target = BaseCreep.getNearestSourceCached(creep);
             const result = creep.harvest(target);;
             if (result === OK) {
                 return OK;

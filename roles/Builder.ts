@@ -1,4 +1,6 @@
-export class Builder {
+import { BaseCreep } from "../BaseCreep";
+
+export class Builder extends BaseCreep {
     public static run(creep: Creep): Optional<number> {
         if (creep.memory.building && creep.carry.energy === 0) {
             creep.memory.building = false;
@@ -9,13 +11,13 @@ export class Builder {
             creep.say('🚧 build');
         }
         if (creep.memory.building) {
-            const targets = creep.room.find(FIND_CONSTRUCTION_SITES);
-            if (targets.length) {
-                const result = creep.build(targets[0]);
+            const target = BaseCreep.getConstructionSourceCached(creep)
+            if (target !== undefined) {
+                const result = creep.build(target);
                 if (result === OK) {
                     return OK;
                 } else if (result === ERR_NOT_IN_RANGE) {
-                    return creep.moveTo(targets[0], { visualizePathStyle: { stroke: '#ffffff' } });
+                    return creep.moveTo(target, { visualizePathStyle: { stroke: '#ffffff' } });
                 }
             }
         } else {

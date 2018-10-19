@@ -8,7 +8,9 @@ interface CreepMemory {
   building: boolean;
   upgrading: boolean;
   harvesting: boolean;
-  target: RoomPosition
+  target: RoomPosition;
+  sourceTarget: RoomPosition;
+  constructionTarget: RoomPosition;
 }
 
 declare const TYPE_HARVESTER = 'harvester';
