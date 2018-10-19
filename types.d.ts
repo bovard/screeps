@@ -7,6 +7,7 @@ interface CreepMemory {
   working: boolean;
   building: boolean;
   upgrading: boolean;
+  harvesting: boolean;
   target: RoomPosition
 }
 

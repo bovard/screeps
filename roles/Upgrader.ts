@@ -18,7 +18,7 @@ export class Upgrader {
             } else if (res === ERR_NOT_IN_RANGE) {
                 return creep.moveTo(creep.room.controller, { visualizePathStyle: { stroke: '#ffffff' } });
             }
-        } else if (creep.carry.energy === 0) {
+        } else if (creep.memory.upgrading === false) {
             let target;
             if (creep.memory.target !== undefined) {
                 const sources = creep.room.lookForAt(LOOK_SOURCES, creep.memory.target);

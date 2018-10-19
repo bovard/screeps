@@ -2,13 +2,35 @@ import { Sources } from "../utils/Sources";
 
 export class Harvester {
     public static run(creep: Creep): Optional<number> {
-        if (creep.carry.energy === 0) {
-            const source = Sources.getClosestSource(creep);
-            const result = creep.harvest(source);
+        if (!creep.memory.harvesting && creep.carry.energy === 0) {
+            creep.memory.harvesting = true;
+            creep.say('🔄 harvest');
+        }
+        if (creep.memory.harvesting && creep.carry.energy === creep.carryCapacity) {
+            creep.memory.harvesting = false;
+            creep.say('⚡ dumping');
+        }
+        if (creep.memory.harvesting) {
+            console.log('Trying to harvest')
+            let target;
+            if (creep.memory.target !== undefined) {
+                const sources = creep.room.lookForAt(LOOK_SOURCES, creep.memory.target);
+                if (sources.length > 0) {
+                    target = sources[0];
+                } else {
+                    delete creep.memory.target;
+                }
+            }
+            if (target === undefined) {
+                target = Sources.getClosestSource(creep);
+                creep.memory.target = target.pos;
+            }
+            const result = creep.harvest(target);
             if (result === OK) {
                 return OK;
             } else if (result === ERR_NOT_IN_RANGE) {
-                return creep.moveTo(source, { visualizePathStyle: { stroke: '#ffaa00' } });
+                console.log('Moving to harvest')
+                return creep.moveTo(target, { visualizePathStyle: { stroke: '#ffaa00' } });
             }
             return undefined;
         } else {
