@@ -35,13 +35,11 @@ export class HQ {
     }
 
     private static spawnCreep(spawnName: string, body: BodyPartConstant[], role: string): Optional<number> {
-        if (Game.spawns[spawnName].canCreateCreep(body)) {
-            var newName = role + Game.time;
-            console.log(`Spawning new ${role}: ${newName}`);
-            return Game.spawns[spawnName].spawnCreep(body, newName,
-                { memory: { role: role } as CreepMemory });
-        }
-        return undefined;
+        console.log(`Trying to create new role ${role}`)
+        var newName = role + Game.time;
+        console.log(`Spawning new ${role}: ${newName}`);
+        return Game.spawns[spawnName].spawnCreep(body, newName,
+            { memory: { role: role } as CreepMemory });
     }
 
     private static printSpawnMessage(spawnName: string) {
