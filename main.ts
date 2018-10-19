@@ -20,7 +20,7 @@ export const loop = ErrorMapper.wrapLoop(() => {
     }
   }
 
-  HQ.spawn();
+  HQ.run("Spawn1");
 
   for (const name in Game.creeps) {
     const creep = Game.creeps[name];

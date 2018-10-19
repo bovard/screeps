@@ -1,7 +1,7 @@
 import { Constants } from "Constants"
 
 export class HQ {
-    public static getMaxScreepCost(spawnName: string) {
+    private static getMaxScreepCost(spawnName: string) {
         return Game.spawns[spawnName].energyCapacity +
             Game.spawns[spawnName].room.find(FIND_STRUCTURES, {
                 filter: (structure: Structure) => {
@@ -10,7 +10,7 @@ export class HQ {
             }).filter((structure: Structure) => Game.spawns[spawnName].pos.getRangeTo(structure.pos) < 20)
                 .map((structure: Structure) => (structure as StructureExtension).energyCapacity).reduce((a, b) => a + b);
     }
-    public static getAvaliableEnergy(spawnName: string) {
+    private static getAvaliableEnergy(spawnName: string) {
         return Game.spawns[spawnName].energy +
             Game.spawns[spawnName].room.find(FIND_STRUCTURES, {
                 filter: (structure: Structure) => {
@@ -19,7 +19,10 @@ export class HQ {
             }).filter((structure: Structure) => Game.spawns[spawnName].pos.getRangeTo(structure.pos) < 20)
                 .map((structure: Structure) => (structure as StructureExtension).energy).reduce((a, b) => a + b);
     }
-    public static spawn(): Optional<number> {
+    public static run(spawnName: string) {
+        this.spawn(spawnName);
+    }
+    private static spawn(spawnName: string): Optional<number> {
         const harvesters = [];
         const builders = [];
         const upgraders = []
@@ -36,8 +39,6 @@ export class HQ {
         console.log('Harvesters: ' + harvesters.length);
         console.log('Builders: ' + builders.length);
         console.log('Upgraders: ' + upgraders.length);
-
-        const spawnName = 'Spawn1';
 
         if (harvesters.length == 0) {
             this.spawnCreep(spawnName, [WORK, CARRY, MOVE], Constants.TYPE_HARVESTER)
