@@ -1,3 +1,5 @@
+import { Constants } from "Constants"
+
 export class HQ {
     public static spawn(): Optional<number> {
         let harvesters = [];
@@ -5,11 +7,11 @@ export class HQ {
         let upgraders = []
         for (const name in Game.creeps) {
             const role = Game.creeps[name].memory.role;
-            if (role == TYPE_HARVESTER) {
+            if (role == Constants.TYPE_HARVESTER) {
                 harvesters.push(Game.creeps[name])
-            } else if (role == TYPE_UPGRADER) {
+            } else if (role == Constants.TYPE_UPGRADER) {
                 upgraders.push(Game.creeps[name])
-            } else if (role == TYPE_BUILDER) {
+            } else if (role == Constants.TYPE_BUILDER) {
                 builders.push(Game.creeps[name])
             }
         }
@@ -20,13 +22,13 @@ export class HQ {
         const spawnName = 'Spawn1';
 
         if (harvesters.length < 2) {
-            this.spawnCreep(spawnName, [WORK, CARRY, MOVE], TYPE_HARVESTER)
+            this.spawnCreep(spawnName, [WORK, CARRY, MOVE], Constants.TYPE_HARVESTER)
             this.printSpawnMessage(spawnName);
         } else if (upgraders.length < 1) {
-            this.spawnCreep(spawnName, [WORK, CARRY, MOVE], TYPE_UPGRADER)
+            this.spawnCreep(spawnName, [WORK, CARRY, MOVE], Constants.TYPE_UPGRADER)
             this.printSpawnMessage(spawnName);
         } else if (builders.length < 1) {
-            this.spawnCreep(spawnName, [WORK, CARRY, MOVE], TYPE_BUILDER)
+            this.spawnCreep(spawnName, [WORK, CARRY, MOVE], Constants.TYPE_BUILDER)
             this.printSpawnMessage(spawnName);
         }
         return undefined

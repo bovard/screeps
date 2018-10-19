@@ -2,6 +2,7 @@ import { Builder } from "roles/Builder";
 import { Harvester } from "roles/Harvester";
 import { Upgrader } from "roles/Upgrader";
 import { HQ } from "HQ";
+import { Constants } from "Constants";
 import { ErrorMapper } from "utils/ErrorMapper";
 
 // When compiling TS to JS and bundling with rollup, the line numbers and file names in error messages change
@@ -23,9 +24,9 @@ export const loop = ErrorMapper.wrapLoop(() => {
 
   for (const name in Game.creeps) {
     const creep = Game.creeps[name];
-    if (creep.memory.role === TYPE_UPGRADER && Upgrader.run(creep) !== undefined) {
+    if (creep.memory.role === Constants.TYPE_UPGRADER && Upgrader.run(creep) !== undefined) {
       continue;
-    } else if (creep.memory.role === TYPE_BUILDER && Builder.run(creep) !== undefined) {
+    } else if (creep.memory.role === Constants.TYPE_BUILDER && Builder.run(creep) !== undefined) {
       continue;
     }
     // default to be a harvester
