@@ -12,6 +12,9 @@ export class BaseCreep {
         });
         return result;
     }
+    public static resetSourceCache(creep: Creep) {
+        delete creep.memory.sourceTarget;
+    }
     public static getNearestSourceCached(creep: Creep): Source {
         let target;
         if (creep.memory.sourceTarget !== undefined) {
