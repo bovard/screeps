@@ -4,6 +4,7 @@ export class Upgrader extends BaseCreep {
     public static run(creep: Creep): Optional<number> {
         if (creep.memory.upgrading && creep.carry.energy === 0) {
             creep.memory.upgrading = false;
+            BaseCreep.resetSourceCache(creep);
             creep.say('🔄 harvest');
         }
         if (!creep.memory.upgrading && creep.carry.energy === creep.carryCapacity) {
