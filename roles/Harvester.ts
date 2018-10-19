@@ -8,6 +8,7 @@ export class Harvester {
             } else if (result === ERR_NOT_IN_RANGE) {
                 return creep.moveTo(sources[0], { visualizePathStyle: { stroke: '#ffaa00' } });
             }
+            return undefined;
         } else {
             const targets = creep.room.find(FIND_STRUCTURES, {
                 filter: (structure: Structure) => {
@@ -23,6 +24,7 @@ export class Harvester {
                 } else if (result === ERR_NOT_IN_RANGE) {
                     return creep.moveTo(targets[0], { visualizePathStyle: { stroke: '#ffffff' } });
                 }
+                return undefined;
             }
         }
         return undefined;
