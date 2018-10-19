@@ -1,12 +1,14 @@
+import { Sources } from "../utils/Sources";
+
 export class Harvester {
     public static run(creep: Creep): Optional<number> {
-        if (creep.carry.energy < creep.carryCapacity) {
-            const sources = creep.room.find(FIND_SOURCES);
-            const result = creep.harvest(sources[0]);
+        if (creep.carry.energy === 0) {
+            const source = Sources.getClosestSource(creep);
+            const result = creep.harvest(source);
             if (result === OK) {
                 return OK;
             } else if (result === ERR_NOT_IN_RANGE) {
-                return creep.moveTo(sources[0], { visualizePathStyle: { stroke: '#ffaa00' } });
+                return creep.moveTo(source, { visualizePathStyle: { stroke: '#ffaa00' } });
             }
             return undefined;
         } else {
