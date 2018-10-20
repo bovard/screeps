@@ -11,6 +11,7 @@ export class Builder extends BaseCreep {
             creep.say('🚧 build');
         }
         if (creep.memory.building) {
+            console.log("building");
             const target = BaseCreep.getConstructionSourceCached(creep)
             if (target !== undefined) {
                 const result = creep.build(target);
@@ -19,6 +20,8 @@ export class Builder extends BaseCreep {
                 } else if (result === ERR_NOT_IN_RANGE) {
                     return creep.moveTo(target, { visualizePathStyle: { stroke: '#ffffff' } });
                 }
+            } else {
+                console.log("no target to build!")
             }
         } else {
             const sources = creep.room.find(FIND_SOURCES);

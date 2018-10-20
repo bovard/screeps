@@ -2,27 +2,27 @@
 
 // memory extension samples
 interface CreepMemory {
-  role: string;
-  room: string;
-  working: boolean;
-  building: boolean;
-  upgrading: boolean;
-  harvesting: boolean;
-  target: RoomPosition;
-  sourceTarget: RoomPosition;
-  constructionTarget: RoomPosition;
+  role: string
+  room: string
+  working: boolean
+  building: boolean
+  upgrading: boolean
+  harvesting: boolean
+  target: RoomPosition
+  sourceTarget: RoomPosition
+  constructionTarget: RoomPosition
 }
 
 type Optional<T> = T | undefined
 
 interface Memory {
-  uuid: number;
-  log: any;
+  uuid: number
+  log: any
 }
 
 // `global` extension samples
 declare namespace NodeJS {
   interface Global {
-    log: any;
+    log: any
   }
 }
