@@ -1,7 +1,14 @@
 import { BaseCreep } from "../BaseCreep";
 
 export class Builder extends BaseCreep {
-    public static run(creep: Creep): Optional<number> {
+    public static run(creep: Creep, roomOb: RoomObservation): Optional<number> {
+        const res = BaseCreep.run(creep, roomOb)
+        if (res !== undefined) {
+            return res
+        }
+        return this.build(creep)
+    }
+    private static build(creep: Creep): Optional<number> {
         if (creep.memory.building && creep.carry.energy === 0) {
             creep.memory.building = false;
             creep.say('🔄 harvest');

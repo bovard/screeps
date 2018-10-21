@@ -1,6 +1,16 @@
 export class BaseCreep {
-    public static run(creep: Creep): Optional<number> {
-
+    public static run(creep: Creep, roomObs: RoomObservation): Optional<number> {
+        if (creep.carry.energy === creep.carryCapacity) {
+            return;
+        }
+        const adjacentTombs = roomObs.tombstones.filter(
+            (tombstone: Tombstone) => {
+                return creep.pos.getRangeTo(tombstone.pos) <= 1
+                    && tombstone.store.energy > 0
+            })
+        if (adjacentTombs.length > 0) {
+            return creep.withdraw(adjacentTombs[0], RESOURCE_ENERGY)
+        }
         return undefined
     }
     public static getClosestSource(creep: Creep): Source {

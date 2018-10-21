@@ -4,12 +4,12 @@ export class HQ {
     public static run(spawnName: string) {
         this.spawn(spawnName)
     }
-    public static getTombstones(spawnName: string) {
-        Game.spawns[spawnName].room.find(FIND_TOMBSTONES, {
+    public static getTombstones(spawnName: string): Tombstone[] {
+        return Game.spawns[spawnName].room.find(FIND_TOMBSTONES, {
             filter: (structure: Structure) => {
                 return structure.structureType === STRUCTURE_EXTENSION
             }
-        })
+        }).filter((tombstone) => tombstone.store.energy > 0);
     }
     private static spawn(spawnName: string): Optional<number> {
         const harvesters = []

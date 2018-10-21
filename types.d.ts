@@ -13,6 +13,10 @@ interface CreepMemory {
   constructionTarget: RoomPosition
 }
 
+interface RoomObservation {
+  tombstones: Tombstone[]
+}
+
 type Optional<T> = T | undefined
 
 interface Memory {

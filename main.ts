@@ -19,32 +19,34 @@ export const loop = ErrorMapper.wrapLoop(() => {
       delete Memory.creeps[name]
     }
   }
-  HQ.run("Spawn1")
+  const hq = "Spawn1"
+  const roomOb = ({ tombstones: HQ.getTombstones(hq) } as RoomObservation)
+  HQ.run(hq)
 
   for (const name in Game.creeps) {
     const creep = Game.creeps[name]
-    if (creep.memory.role === Constants.TYPE_UPGRADER && Upgrader.run(creep) !== undefined) {
+    if (creep.memory.role === Constants.TYPE_UPGRADER && Upgrader.run(creep, roomOb) !== undefined) {
       console.log("Primary mission: Upgrader")
       continue
-    } else if (creep.memory.role === Constants.TYPE_BUILDER && Builder.run(creep) !== undefined) {
+    } else if (creep.memory.role === Constants.TYPE_BUILDER && Builder.run(creep, roomOb) !== undefined) {
       console.log("Primary mission: Builder")
       continue
-    } else if (creep.memory.role === Constants.TYPE_HARVESTER && Harvester.run(creep) !== undefined) {
+    } else if (creep.memory.role === Constants.TYPE_HARVESTER && Harvester.run(creep, roomOb) !== undefined) {
       console.log("Primary mission: Harvester")
       continue
     }
     // default to be a harvester
-    if (Harvester.run(creep) !== undefined) {
+    if (Harvester.run(creep, roomOb) !== undefined) {
       console.log("Secondary mission: Harvester")
       continue
     }
     // default to be a builder
-    if (Builder.run(creep) !== undefined) {
+    if (Builder.run(creep, roomOb) !== undefined) {
       console.log("Secondary mission: Builder")
       continue
     }
     // default to be an upgrader
-    if (Upgrader.run(creep) !== undefined) {
+    if (Upgrader.run(creep, roomOb) !== undefined) {
       console.log("Secondary mission: Upgrader")
       continue
     }

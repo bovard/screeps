@@ -1,7 +1,14 @@
 import { BaseCreep } from "../BaseCreep"
 
 export class Upgrader extends BaseCreep {
-    public static run(creep: Creep): Optional<number> {
+    public static run(creep: Creep, roomOb: RoomObservation): Optional<number> {
+        const res = BaseCreep.run(creep, roomOb)
+        if (res !== undefined) {
+            return res
+        }
+        return this.upgrade(creep)
+    }
+    public static upgrade(creep: Creep): Optional<number> {
         if (creep.memory.upgrading && creep.carry.energy === 0) {
             creep.memory.upgrading = false
             BaseCreep.resetSourceCache(creep)
