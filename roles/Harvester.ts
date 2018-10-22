@@ -15,13 +15,14 @@ export class Harvester extends BaseCreep {
     }
     private static harvest(creep: Creep): Optional<number> {
         const isHarvesting = creep.memory.flagOne
+        const isHarvestingFlag = "flagOne"
         if (!isHarvesting && creep.carry.energy === 0) {
-            creep.memory.flagOne = true
+            creep.memory[isHarvestingFlag] = true
             BaseCreep.resetSourceCache(creep)
             creep.say('🔄 harvest')
         }
         if (isHarvesting && creep.carry.energy === creep.carryCapacity) {
-            creep.memory.flagOne = false
+            creep.memory[isHarvestingFlag] = false
             creep.say('⚡ dumping')
         }
         if (isHarvesting) {

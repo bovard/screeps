@@ -14,12 +14,13 @@ export class Builder extends BaseCreep {
     }
     private static build(creep: Creep): Optional<number> {
         const isBuilding = creep.memory.flagOne
+        const isBuildingFlag = 'flagOne'
         if (isBuilding && creep.carry.energy === 0) {
-            creep.memory.flagOne = false;
+            creep.memory[isBuildingFlag] = false;
             creep.say('🔄 collect to build');
         }
         if (!isBuilding && creep.carry.energy === creep.carryCapacity) {
-            creep.memory.flagOne = true;
+            creep.memory[isBuildingFlag] = true;
             creep.say('🚧 build');
         }
         if (isBuilding) {
