@@ -26,11 +26,7 @@ export const loop = ErrorMapper.wrapLoop(() => {
   for (const name in Game.creeps) {
     const creep = Game.creeps[name]
     // see if we need to continue last role
-    if (creep.memory.lastRole === Constants.TYPE_UPGRADER && Upgrader.run(creep, roomOb) !== undefined) {
-      creep.memory.lastRole = Constants.TYPE_UPGRADER
-      console.log("Primary mission: Upgrader")
-      continue
-    } else if (creep.memory.lastRole === Constants.TYPE_BUILDER && Builder.run(creep, roomOb) !== undefined) {
+    if (creep.memory.lastRole === Constants.TYPE_BUILDER && Builder.run(creep, roomOb) !== undefined) {
       creep.memory.lastRole = Constants.TYPE_BUILDER
       console.log("Primary mission: Builder")
       continue
