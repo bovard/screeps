@@ -77,7 +77,7 @@ export class BaseCreep {
         let result = sources[0]
         sources.forEach(element => {
             const dist = creep.pos.getRangeTo(element.pos)
-            if (dist < closest) {
+            if (dist < closest && element.energy > 0) {
                 closest = dist
                 result = element
             }
@@ -91,7 +91,7 @@ export class BaseCreep {
         let target
         if (creep.memory.sourceTarget !== undefined) {
             const sources = creep.room.lookForAt(LOOK_SOURCES, creep.memory.sourceTarget)
-            if (sources.length > 0) {
+            if (sources.length > 0 && sources[0].energy > 0) {
                 target = sources[0]
             } else {
                 delete creep.memory.sourceTarget
