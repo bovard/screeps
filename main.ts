@@ -25,19 +25,36 @@ export const loop = ErrorMapper.wrapLoop(() => {
 
   for (const name in Game.creeps) {
     const creep = Game.creeps[name]
-    if ((creep.memory.lastRole === Constants.TYPE_UPGRADER || creep.memory.role === Constants.TYPE_UPGRADER) && Upgrader.run(creep, roomOb) !== undefined) {
+    // see if we need to continue last role
+    if (creep.memory.lastRole === Constants.TYPE_UPGRADER && Upgrader.run(creep, roomOb) !== undefined) {
       creep.memory.lastRole = Constants.TYPE_UPGRADER
       console.log("Primary mission: Upgrader")
       continue
-    } else if ((creep.memory.lastRole === Constants.TYPE_BUILDER || creep.memory.role === Constants.TYPE_BUILDER) && Builder.run(creep, roomOb) !== undefined) {
+    } else if (creep.memory.lastRole === Constants.TYPE_BUILDER && Builder.run(creep, roomOb) !== undefined) {
       creep.memory.lastRole = Constants.TYPE_BUILDER
       console.log("Primary mission: Builder")
       continue
-    } else if ((creep.memory.lastRole === Constants.TYPE_HARVESTER || creep.memory.role === Constants.TYPE_HARVESTER) && Harvester.run(creep, roomOb) !== undefined) {
+    } else if (creep.memory.lastRole === Constants.TYPE_HARVESTER && Harvester.run(creep, roomOb) !== undefined) {
       creep.memory.lastRole = Constants.TYPE_HARVESTER
       console.log("Primary mission: Harvester")
       continue
     }
+
+    // see if we can do our primary role
+    if (creep.memory.role === Constants.TYPE_UPGRADER && Upgrader.run(creep, roomOb) !== undefined) {
+      creep.memory.lastRole = Constants.TYPE_UPGRADER
+      console.log("Primary mission: Upgrader")
+      continue
+    } else if (creep.memory.role === Constants.TYPE_BUILDER && Builder.run(creep, roomOb) !== undefined) {
+      creep.memory.lastRole = Constants.TYPE_BUILDER
+      console.log("Primary mission: Builder")
+      continue
+    } else if (creep.memory.role === Constants.TYPE_HARVESTER && Harvester.run(creep, roomOb) !== undefined) {
+      creep.memory.lastRole = Constants.TYPE_HARVESTER
+      console.log("Primary mission: Harvester")
+      continue
+    }
+
     // default to be a harvester
     if (Harvester.run(creep, roomOb) !== undefined) {
       creep.memory.lastRole = Constants.TYPE_HARVESTER
