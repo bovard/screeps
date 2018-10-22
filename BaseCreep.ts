@@ -10,6 +10,7 @@ export class BaseCreep {
     public static run(creep: Creep, roomObs: RoomObservation): Optional<number> {
         this.pickUpTombstone(creep, roomObs)
         this.repairRoad(creep, roomObs)
+        this.pickUpDroppedEnergy(creep, roomObs)
         return undefined
     }
     private static repairRoad(creep: Creep, roomObs: RoomObservation) {
@@ -20,6 +21,19 @@ export class BaseCreep {
             }
         })
     }
+    private static pickUpDroppedEnergy(creep: Creep, roomObs: RoomObservation) {
+        if (creep.carry.energy === creep.carryCapacity) {
+            return;
+        }
+        roomObs.droppedEnergy.forEach(
+            resource => {
+                if (creep.pos.getRangeTo(resource.pos) <= 1) {
+                    console.log(`grabbing energy from dropped energy at ${resource.pos}`)
+                    creep.pickup(resource)
+                }
+            })
+    }
+
     private static pickUpTombstone(creep: Creep, roomObs: RoomObservation) {
         if (creep.carry.energy === creep.carryCapacity) {
             return;

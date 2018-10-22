@@ -6,9 +6,13 @@ export class HQ {
     }
     public static getRoomObs(spawnName: string): RoomObservation {
         return ({
+            droppedEnergy: this.getDroppedEnergy(spawnName),
             roads: this.getRoads(spawnName),
             tombstones: this.getTombstones(spawnName),
         } as RoomObservation)
+    }
+    public static getDroppedEnergy(spawnName: string): Resource[] {
+        return Game.spawns[spawnName].room.find(FIND_DROPPED_RESOURCES)
     }
     // TODO: how to make a dictionary?
     public static getRoads(spawnName: string): StructureRoad[] {
@@ -88,7 +92,6 @@ export class HQ {
         console.log(`Got result: ${res}`)
         return res
     }
-
     private static getMaxScreepCost(spawnName: string) {
         return Game.spawns[spawnName].energyCapacity +
             Game.spawns[spawnName].room.find(FIND_STRUCTURES, {
