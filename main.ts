@@ -25,14 +25,15 @@ export const loop = ErrorMapper.wrapLoop(() => {
 
   for (const name in Game.creeps) {
     const creep = Game.creeps[name]
+    console.log(`Finding role for creep ${name}`)
     // see if we need to continue last role
     if (creep.memory.lastRole === Constants.TYPE_BUILDER && Builder.run(creep, roomOb) !== undefined) {
       creep.memory.lastRole = Constants.TYPE_BUILDER
-      console.log("Primary mission: Builder")
+      console.log("Continuing last mission: Builder")
       continue
     } else if (creep.memory.lastRole === Constants.TYPE_HARVESTER && Harvester.run(creep, roomOb) !== undefined) {
       creep.memory.lastRole = Constants.TYPE_HARVESTER
-      console.log("Primary mission: Harvester")
+      console.log("Continuing last mission: Harvester")
       continue
     }
 
@@ -69,6 +70,7 @@ export const loop = ErrorMapper.wrapLoop(() => {
       console.log("Secondary mission: Upgrader")
       continue
     }
+    console.log("Didn't find a role! (this is bad)")
   }
   console.log(`Cpu usage at end: ${Game.cpu.getUsed()}`)
 })
