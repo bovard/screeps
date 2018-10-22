@@ -14,13 +14,14 @@ export class Upgrader extends BaseCreep {
     }
     public static upgrade(creep: Creep): Optional<number> {
         const isUpgrading = creep.memory.flagOne
+        const isUpgradingFlag = "flagOne"
         if (isUpgrading && creep.carry.energy === 0) {
-            creep.memory.flagOne = false
+            creep.memory[isUpgradingFlag] = false
             BaseCreep.resetSourceCache(creep)
             creep.say('🔄 collecting to upgrade')
         }
         if (!isUpgrading && creep.carry.energy === creep.carryCapacity) {
-            creep.memory.flagOne = true
+            creep.memory[isUpgradingFlag] = true
             creep.say('⚡ upgrade')
         }
 
