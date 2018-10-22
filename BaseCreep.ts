@@ -8,18 +8,30 @@ export class BaseCreep {
         delete creep.memory.targetTwo
     }
     public static run(creep: Creep, roomObs: RoomObservation): Optional<number> {
+        this.pickUpTombstone(creep, roomObs)
+        this.repairRoad(creep, roomObs)
+        return undefined
+    }
+    private static repairRoad(creep: Creep, roomObs: RoomObservation) {
+        roomObs.roads.forEach(road => {
+            if (road.pos.getRangeTo(creep.pos) <= 1 && road.hits < road.hitsMax / 2) {
+                console.log(`repairing road at ${road.pos}`)
+                creep.repair(road);
+            }
+        })
+    }
+    private static pickUpTombstone(creep: Creep, roomObs: RoomObservation) {
         if (creep.carry.energy === creep.carryCapacity) {
             return;
         }
-        const adjacentTombs = roomObs.tombstones.filter(
-            (tombstone: Tombstone) => {
-                return creep.pos.getRangeTo(tombstone.pos) <= 1
-                    && tombstone.store.energy > 0
+        roomObs.tombstones.forEach(
+            tombstone => {
+                if (creep.pos.getRangeTo(tombstone.pos) <= 1
+                    && tombstone.store.energy > 0) {
+                    console.log(`grabbing energy from tombstone at ${tombstone.pos}`)
+                    creep.withdraw(tombstone, RESOURCE_ENERGY)
+                }
             })
-        if (adjacentTombs.length > 0) {
-            return creep.withdraw(adjacentTombs[0], RESOURCE_ENERGY)
-        }
-        return undefined
     }
     public static getClosestEnergyDeposite(creep: Creep): Optional<Structure> {
         const targets = creep.room.find(FIND_STRUCTURES, {

@@ -4,12 +4,37 @@ export class HQ {
     public static run(spawnName: string) {
         this.spawn(spawnName)
     }
+    public static getRoomObs(spawnName: string): RoomObservation {
+        return ({
+            roads: this.getRoads(spawnName),
+            tombstones: this.getTombstones(spawnName),
+        } as RoomObservation)
+    }
+    // TODO: how to make a dictionary?
+    public static getRoads(spawnName: string): StructureRoad[] {
+        return Game.spawns[spawnName].room.find(FIND_STRUCTURES, {
+            filter: (structure: Structure) => structure.structureType === STRUCTURE_ROAD
+        }).map((structure: Structure) => structure as StructureRoad)
+    }
     public static getTombstones(spawnName: string): Tombstone[] {
-        return Game.spawns[spawnName].room.find(FIND_TOMBSTONES, {
-            filter: (structure: Structure) => {
-                return structure.structureType === STRUCTURE_EXTENSION
-            }
-        }).filter((tombstone) => tombstone.store.energy > 0);
+        return Game.spawns[spawnName].room.find(FIND_TOMBSTONES)
+            .filter((tombstone) => tombstone.store.energy > 0);
+    }
+    private static getMaxBody(maxCost: number): BodyPartConstant[] {
+        const body = [WORK, CARRY, MOVE]
+        let cost = 200
+        while (cost + 200 <= maxCost) {
+            body.push(WORK)
+            body.push(MOVE)
+            body.push(CARRY)
+            cost += 200
+        }
+        while (cost + 50 <= maxCost) {
+            body.push(CARRY)
+            cost += 50
+        }
+        console.log(`total cost ${cost}`)
+        return body
     }
     private static spawn(spawnName: string): Optional<number> {
         const harvesters = []
@@ -29,40 +54,31 @@ export class HQ {
         console.log('Builders: ' + builders.length)
         console.log('Upgraders: ' + upgraders.length)
 
-        if (harvesters.length == 0) {
-            this.spawnCreep(spawnName, [WORK, CARRY, MOVE], Constants.TYPE_HARVESTER)
+        const maxCost = this.getMaxScreepCost(spawnName)
+        const avaliable = this.getAvaliableEnergy(spawnName)
+
+        // disaster recovery
+        if (harvesters.length === 0) {
+            this.spawnCreep(spawnName, this.getMaxBody(avaliable), Constants.TYPE_HARVESTER)
             this.printSpawnMessage(spawnName)
             return
         }
 
-        const maxCost = this.getMaxScreepCost(spawnName)
-        const avaliable = this.getAvaliableEnergy(spawnName)
-        const body = [WORK, CARRY, MOVE]
-        let cost = 200
-        while (cost + 200 <= maxCost) {
-            body.push(WORK)
-            body.push(MOVE)
-            body.push(CARRY)
-            cost += 200
-        }
-        while (cost + 50 <= maxCost) {
-            body.push(CARRY)
-            cost += 50
-        }
-        console.log(`Max cost is ${maxCost} (${avaliable} avaliable) we are building ${cost}, ${body}`)
-        if (harvesters.length < 3) {
+        const body = this.getMaxBody(maxCost)
+
+        console.log(`Max cost is ${maxCost} (${avaliable} avaliable) we are building ${body}`)
+        if (harvesters.length < 2) {
             this.spawnCreep(spawnName, body, Constants.TYPE_HARVESTER)
             this.printSpawnMessage(spawnName)
-        } else if (upgraders.length < 2) {
+        } else if (upgraders.length < 1) {
             this.spawnCreep(spawnName, body, Constants.TYPE_UPGRADER)
             this.printSpawnMessage(spawnName)
-        } else if (builders.length < 2) {
+        } else if (builders.length < 1) {
             this.spawnCreep(spawnName, body, Constants.TYPE_BUILDER)
             this.printSpawnMessage(spawnName)
         }
         return undefined
     }
-
     private static spawnCreep(spawnName: string, body: BodyPartConstant[], roleString: string): Optional<number> {
         console.log(`Trying to create new role ${roleString}`)
         const newName = roleString + Game.time
@@ -91,10 +107,6 @@ export class HQ {
             }).filter((structure: Structure) => Game.spawns[spawnName].pos.getRangeTo(structure.pos) < 20)
                 .map((structure: Structure) => (structure as StructureExtension).energy).reduce((a, b) => a + b)
     }
-    private static build(spawnName: string) {
-        Game.constructionSites
-    }
-
     private static printSpawnMessage(spawnName: string) {
         if (Game.spawns[spawnName].spawning) {
             const spawningCreep = Game.creeps[Game.spawns[spawnName].spawning!.name]

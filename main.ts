@@ -20,7 +20,7 @@ export const loop = ErrorMapper.wrapLoop(() => {
     }
   }
   const hq = "Spawn1"
-  const roomOb = ({ tombstones: HQ.getTombstones(hq) } as RoomObservation)
+  const roomOb = HQ.getRoomObs(hq);
   HQ.run(hq)
 
   for (const name in Game.creeps) {
