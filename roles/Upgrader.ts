@@ -3,9 +3,10 @@ import { Constants } from "../Constants";
 
 export class Upgrader extends BaseCreep {
     public static run(creep: Creep, roomOb: RoomObservation): Optional<number> {
-        if (creep.memory.lastRole !== Constants.TYPE_HARVESTER) {
+        if (creep.memory.lastRole !== Constants.TYPE_UPGRADER) {
             BaseCreep.resetMemeory(creep)
         }
+        creep.memory.lastRole = Constants.TYPE_UPGRADER
         const res = BaseCreep.run(creep, roomOb)
         if (res !== undefined) {
             return res
@@ -13,15 +14,17 @@ export class Upgrader extends BaseCreep {
         return this.upgrade(creep)
     }
     public static upgrade(creep: Creep): Optional<number> {
-        const isUpgrading = creep.memory.flagOne
+        let isUpgrading = creep.memory.flagOne
         const isUpgradingFlag = "flagOne"
         if (isUpgrading && creep.carry.energy === 0) {
             creep.memory[isUpgradingFlag] = false
+            isUpgrading = false
             BaseCreep.resetSourceCache(creep)
             creep.say('🔄 collecting to upgrade')
         }
         if (!isUpgrading && creep.carry.energy === creep.carryCapacity) {
             creep.memory[isUpgradingFlag] = true
+            isUpgrading = true
             creep.say('⚡ upgrade')
         }
 

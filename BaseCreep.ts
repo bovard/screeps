@@ -7,11 +7,10 @@ export class BaseCreep {
         delete creep.memory.targetOne
         delete creep.memory.targetTwo
     }
-    public static run(creep: Creep, roomObs: RoomObservation): Optional<number> {
+    public static run(creep: Creep, roomObs: RoomObservation) {
         this.pickUpTombstone(creep, roomObs)
         this.repairRoad(creep, roomObs)
         this.pickUpDroppedEnergy(creep, roomObs)
-        return undefined
     }
     private static repairRoad(creep: Creep, roomObs: RoomObservation) {
         roomObs.roads.forEach(road => {
@@ -56,7 +55,7 @@ export class BaseCreep {
             }
         })
         let closest = 10000
-        let result = undefined
+        let result
         targets.forEach(element => {
             const dist = creep.pos.getRangeTo(element.pos)
             if (dist < closest) {
@@ -70,7 +69,7 @@ export class BaseCreep {
         console.log("Get closest structure");
         const sources = creep.room.find(FIND_CONSTRUCTION_SITES)
         let closest = 10000
-        let result = undefined
+        let result
         sources.forEach(element => {
             const dist = creep.pos.getRangeTo(element.pos)
             if (dist < closest) {

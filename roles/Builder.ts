@@ -6,6 +6,7 @@ export class Builder extends BaseCreep {
         if (creep.memory.lastRole !== Constants.TYPE_BUILDER) {
             BaseCreep.resetMemeory(creep)
         }
+        creep.memory.lastRole = Constants.TYPE_BUILDER
         const res = BaseCreep.run(creep, roomOb)
         if (res !== undefined) {
             return res
@@ -13,14 +14,16 @@ export class Builder extends BaseCreep {
         return this.build(creep)
     }
     private static build(creep: Creep): Optional<number> {
-        const isBuilding = creep.memory.flagOne
+        let isBuilding = creep.memory.flagOne
         const isBuildingFlag = 'flagOne'
         if (isBuilding && creep.carry.energy === 0) {
             creep.memory[isBuildingFlag] = false;
+            isBuilding = false
             creep.say('🔄 collect to build');
         }
         if (!isBuilding && creep.carry.energy === creep.carryCapacity) {
             creep.memory[isBuildingFlag] = true;
+            isBuilding = true
             creep.say('🚧 build');
         }
         if (isBuilding) {

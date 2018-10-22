@@ -7,6 +7,7 @@ export class Harvester extends BaseCreep {
         if (creep.memory.lastRole !== Constants.TYPE_HARVESTER) {
             BaseCreep.resetMemeory(creep)
         }
+        creep.memory.lastRole = Constants.TYPE_HARVESTER
         const res = BaseCreep.run(creep, roomOb)
         if (res !== undefined) {
             return res
@@ -14,15 +15,17 @@ export class Harvester extends BaseCreep {
         return this.harvest(creep)
     }
     private static harvest(creep: Creep): Optional<number> {
-        const isHarvesting = creep.memory.flagOne
+        let isHarvesting = creep.memory.flagOne
         const isHarvestingFlag = "flagOne"
         if (!isHarvesting && creep.carry.energy === 0) {
             creep.memory[isHarvestingFlag] = true
+            isHarvesting = true
             BaseCreep.resetSourceCache(creep)
             creep.say('🔄 harvest')
         }
         if (isHarvesting && creep.carry.energy === creep.carryCapacity) {
             creep.memory[isHarvestingFlag] = false
+            isHarvesting = false
             creep.say('⚡ dumping')
         }
         if (isHarvesting) {
