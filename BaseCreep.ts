@@ -122,7 +122,7 @@ export class BaseCreep {
             }
         }
         if (target === undefined) {
-            const target = this.getClosestConstructionSite(creep)
+            target = this.getClosestConstructionSite(creep)
             if (target !== undefined) {
                 creep.memory.constructionTarget = target.pos
             }
