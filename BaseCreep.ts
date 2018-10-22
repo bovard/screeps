@@ -13,6 +13,39 @@ export class BaseCreep {
         }
         return undefined
     }
+    public static getClosestEnergyDeposite(creep: Creep): Optional<Structure> {
+        const targets = creep.room.find(FIND_STRUCTURES, {
+            filter: (structure: Structure) => {
+                return (structure.structureType === STRUCTURE_EXTENSION && (structure as StructureExtension).energy < (structure as StructureExtension).energyCapacity) ||
+                    (structure.structureType === STRUCTURE_SPAWN && (structure as StructureSpawn).energy < (structure as StructureSpawn).energyCapacity) ||
+                    (structure.structureType === STRUCTURE_TOWER && (structure as StructureTower).energy < (structure as StructureTower).energyCapacity)
+            }
+        })
+        let closest = 10000
+        let result = undefined
+        targets.forEach(element => {
+            const dist = creep.pos.getRangeTo(element.pos)
+            if (dist < closest) {
+                closest = dist
+                result = element
+            }
+        })
+        return result;
+    }
+    public static getClosestConstructionSite(creep: Creep): Optional<ConstructionSite> {
+        console.log("Get closest structure");
+        const sources = creep.room.find(FIND_CONSTRUCTION_SITES)
+        let closest = 10000
+        let result = undefined
+        sources.forEach(element => {
+            const dist = creep.pos.getRangeTo(element.pos)
+            if (dist < closest) {
+                closest = dist
+                result = element
+            }
+        })
+        return result;
+    }
     public static getClosestSource(creep: Creep): Source {
         const sources = creep.room.find(FIND_SOURCES)
         let closest = 10000
@@ -56,9 +89,8 @@ export class BaseCreep {
             }
         }
         if (target === undefined) {
-            const targets = creep.room.find(FIND_CONSTRUCTION_SITES)
-            if (targets.length) {
-                target = targets[0]
+            const target = this.getClosestConstructionSite(creep)
+            if (target !== undefined) {
                 creep.memory.constructionTarget = target.pos
             }
         }
