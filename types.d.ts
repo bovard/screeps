@@ -15,6 +15,7 @@ interface CreepMemory {
 
 interface RoomObservation {
   tombstones: Tombstone[]
+  roads: StructureRoad[]
 }
 
 type Optional<T> = T | undefined

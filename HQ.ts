@@ -4,12 +4,21 @@ export class HQ {
     public static run(spawnName: string) {
         this.spawn(spawnName)
     }
+    public static getRoomObs(spawnName: string): RoomObservation {
+        return ({
+            roads: this.getRoads(spawnName),
+            tombstones: this.getTombstones(spawnName),
+        } as RoomObservation)
+    }
+    // TODO: how to make a dictionary?
+    public static getRoads(spawnName: string): StructureRoad[] {
+        return Game.spawns[spawnName].room.find(FIND_STRUCTURES, {
+            filter: (structure: Structure) => structure.structureType === STRUCTURE_ROAD
+        }).map((structure: Structure) => structure as StructureRoad)
+    }
     public static getTombstones(spawnName: string): Tombstone[] {
-        return Game.spawns[spawnName].room.find(FIND_TOMBSTONES, {
-            filter: (structure: Structure) => {
-                return structure.structureType === STRUCTURE_EXTENSION
-            }
-        }).filter((tombstone) => tombstone.store.energy > 0);
+        return Game.spawns[spawnName].room.find(FIND_TOMBSTONES)
+            .filter((tombstone) => tombstone.store.energy > 0);
     }
     private static getMaxBody(maxCost: number): BodyPartConstant[] {
         const body = [WORK, CARRY, MOVE]
