@@ -79,7 +79,6 @@ export class HQ {
         }
         return undefined
     }
-
     private static spawnCreep(spawnName: string, body: BodyPartConstant[], roleString: string): Optional<number> {
         console.log(`Trying to create new role ${roleString}`)
         const newName = roleString + Game.time
