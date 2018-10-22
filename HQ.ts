@@ -11,6 +11,22 @@ export class HQ {
             }
         }).filter((tombstone) => tombstone.store.energy > 0);
     }
+    private static getMaxBody(maxCost: number): BodyPartConstant[] {
+        const body = [WORK, CARRY, MOVE]
+        let cost = 200
+        while (cost + 200 <= maxCost) {
+            body.push(WORK)
+            body.push(MOVE)
+            body.push(CARRY)
+            cost += 200
+        }
+        while (cost + 50 <= maxCost) {
+            body.push(CARRY)
+            cost += 50
+        }
+        console.log(`total cost ${cost}`)
+        return body
+    }
     private static spawn(spawnName: string): Optional<number> {
         const harvesters = []
         const builders = []
@@ -29,34 +45,26 @@ export class HQ {
         console.log('Builders: ' + builders.length)
         console.log('Upgraders: ' + upgraders.length)
 
-        if (harvesters.length == 0) {
-            this.spawnCreep(spawnName, [WORK, CARRY, MOVE], Constants.TYPE_HARVESTER)
+        const maxCost = this.getMaxScreepCost(spawnName)
+        const avaliable = this.getAvaliableEnergy(spawnName)
+
+        // disaster recovery
+        if (harvesters.length === 0) {
+            this.spawnCreep(spawnName, this.getMaxBody(avaliable), Constants.TYPE_HARVESTER)
             this.printSpawnMessage(spawnName)
             return
         }
 
-        const maxCost = this.getMaxScreepCost(spawnName)
-        const avaliable = this.getAvaliableEnergy(spawnName)
-        const body = [WORK, CARRY, MOVE]
-        let cost = 200
-        while (cost + 200 <= maxCost) {
-            body.push(WORK)
-            body.push(MOVE)
-            body.push(CARRY)
-            cost += 200
-        }
-        while (cost + 50 <= maxCost) {
-            body.push(CARRY)
-            cost += 50
-        }
-        console.log(`Max cost is ${maxCost} (${avaliable} avaliable) we are building ${cost}, ${body}`)
-        if (harvesters.length < 3) {
+        const body = this.getMaxBody(maxCost)
+
+        console.log(`Max cost is ${maxCost} (${avaliable} avaliable) we are building ${body}`)
+        if (harvesters.length < 2) {
             this.spawnCreep(spawnName, body, Constants.TYPE_HARVESTER)
             this.printSpawnMessage(spawnName)
-        } else if (upgraders.length < 2) {
+        } else if (upgraders.length < 1) {
             this.spawnCreep(spawnName, body, Constants.TYPE_UPGRADER)
             this.printSpawnMessage(spawnName)
-        } else if (builders.length < 2) {
+        } else if (builders.length < 1) {
             this.spawnCreep(spawnName, body, Constants.TYPE_BUILDER)
             this.printSpawnMessage(spawnName)
         }
@@ -91,10 +99,6 @@ export class HQ {
             }).filter((structure: Structure) => Game.spawns[spawnName].pos.getRangeTo(structure.pos) < 20)
                 .map((structure: Structure) => (structure as StructureExtension).energy).reduce((a, b) => a + b)
     }
-    private static build(spawnName: string) {
-        Game.constructionSites
-    }
-
     private static printSpawnMessage(spawnName: string) {
         if (Game.spawns[spawnName].spawning) {
             const spawningCreep = Game.creeps[Game.spawns[spawnName].spawning!.name]
