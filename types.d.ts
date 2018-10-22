@@ -7,13 +7,10 @@ interface CreepMemory {
   target: RoomPosition
   sourceTarget: RoomPosition
   constructionTarget: RoomPosition
+  building: boolean
+  harvesting: boolean
+  upgrading: boolean
   lastRole: string
-  flagOne: boolean
-  flagTwo: boolean
-  flagThree: boolean
-  flagFour: boolean
-  targetOne: RoomPosition
-  targetTwo: RoomPosition
 }
 
 interface RoomObservation {

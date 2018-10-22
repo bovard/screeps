@@ -1,12 +1,4 @@
 export class BaseCreep {
-    public static resetMemeory(creep: Creep) {
-        delete creep.memory.flagOne
-        delete creep.memory.flagTwo
-        delete creep.memory.flagThree
-        delete creep.memory.flagFour
-        delete creep.memory.targetOne
-        delete creep.memory.targetTwo
-    }
     public static run(creep: Creep, roomObs: RoomObservation) {
         this.pickUpTombstone(creep, roomObs)
         this.repairRoad(creep, roomObs)

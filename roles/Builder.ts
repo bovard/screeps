@@ -3,10 +3,6 @@ import { Constants } from "../Constants";
 
 export class Builder extends BaseCreep {
     public static run(creep: Creep, roomOb: RoomObservation): Optional<number> {
-        if (creep.memory.lastRole !== Constants.TYPE_BUILDER) {
-            BaseCreep.resetMemeory(creep)
-        }
-        creep.memory.lastRole = Constants.TYPE_BUILDER
         const res = BaseCreep.run(creep, roomOb)
         if (res !== undefined) {
             return res
@@ -14,19 +10,15 @@ export class Builder extends BaseCreep {
         return this.build(creep)
     }
     private static build(creep: Creep): Optional<number> {
-        let isBuilding = creep.memory.flagOne
-        const isBuildingFlag = 'flagOne'
-        if (isBuilding && creep.carry.energy === 0) {
-            creep.memory[isBuildingFlag] = false;
-            isBuilding = false
+        if (creep.memory.building && creep.carry.energy === 0) {
+            creep.memory.building = false;
             creep.say('🔄 collect to build');
         }
-        if (!isBuilding && creep.carry.energy === creep.carryCapacity) {
-            creep.memory[isBuildingFlag] = true;
-            isBuilding = true
+        if (!creep.memory.building && creep.carry.energy === creep.carryCapacity) {
+            creep.memory.building = true;
             creep.say('🚧 build');
         }
-        if (isBuilding) {
+        if (creep.memory.building) {
             console.log("building");
             const target = BaseCreep.getConstructionSourceCached(creep)
             if (target !== undefined) {
