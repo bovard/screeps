@@ -1,4 +1,12 @@
 export class BaseCreep {
+    public static resetMemeory(creep: Creep) {
+        delete creep.memory.flagOne
+        delete creep.memory.flagTwo
+        delete creep.memory.flagThree
+        delete creep.memory.flagFour
+        delete creep.memory.targetOne
+        delete creep.memory.targetTwo
+    }
     public static run(creep: Creep, roomObs: RoomObservation): Optional<number> {
         if (creep.carry.energy === creep.carryCapacity) {
             return;

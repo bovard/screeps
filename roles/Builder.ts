@@ -1,7 +1,11 @@
 import { BaseCreep } from "../BaseCreep";
+import { Constants } from "../Constants";
 
 export class Builder extends BaseCreep {
     public static run(creep: Creep, roomOb: RoomObservation): Optional<number> {
+        if (creep.memory.lastRole !== Constants.TYPE_BUILDER) {
+            BaseCreep.resetMemeory(creep)
+        }
         const res = BaseCreep.run(creep, roomOb)
         if (res !== undefined) {
             return res
@@ -9,15 +13,16 @@ export class Builder extends BaseCreep {
         return this.build(creep)
     }
     private static build(creep: Creep): Optional<number> {
-        if (creep.memory.building && creep.carry.energy === 0) {
-            creep.memory.building = false;
-            creep.say('🔄 harvest');
+        const isBuilding = creep.memory.flagOne
+        if (isBuilding && creep.carry.energy === 0) {
+            creep.memory.flagOne = false;
+            creep.say('🔄 collect to build');
         }
-        if (!creep.memory.building && creep.carry.energy === creep.carryCapacity) {
-            creep.memory.building = true;
+        if (!isBuilding && creep.carry.energy === creep.carryCapacity) {
+            creep.memory.flagOne = true;
             creep.say('🚧 build');
         }
-        if (creep.memory.building) {
+        if (isBuilding) {
             console.log("building");
             const target = BaseCreep.getConstructionSourceCached(creep)
             if (target !== undefined) {
@@ -27,16 +32,14 @@ export class Builder extends BaseCreep {
                 } else if (result === ERR_NOT_IN_RANGE) {
                     return creep.moveTo(target, { visualizePathStyle: { stroke: '#ffffff' } });
                 }
-            } else {
-                console.log("no target to build!")
             }
         } else {
-            const sources = creep.room.find(FIND_SOURCES);
-            const result = creep.harvest(sources[0]);
+            const target = BaseCreep.getNearestSourceCached(creep)
+            const result = creep.harvest(target);
             if (result === OK) {
                 return OK;
             } else if (result === ERR_NOT_IN_RANGE) {
-                return creep.moveTo(sources[0], { visualizePathStyle: { stroke: '#ffaa00' } });
+                return creep.moveTo(target, { visualizePathStyle: { stroke: '#ffaa00' } });
             }
         }
         return undefined;
