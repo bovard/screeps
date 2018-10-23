@@ -12,8 +12,6 @@ export class Upgrader extends BaseCreep {
     public static upgrade(creep: Creep): Optional<number> {
         if (creep.memory.upgrading === undefined) {
             creep.memory.upgrading = false
-            BaseCreep.resetSourceCache(creep)
-            creep.say('🔄 collecting to upgrade')
         }
         if (creep.memory.upgrading && creep.carry.energy === 0) {
             creep.memory.upgrading = false

@@ -12,7 +12,6 @@ export class Builder extends BaseCreep {
     private static build(creep: Creep): Optional<number> {
         if (creep.memory.building === undefined) {
             creep.memory.building = false
-            creep.say('🔄 collect to build');
         }
         if (creep.memory.building && creep.carry.energy === 0) {
             creep.memory.building = false;
