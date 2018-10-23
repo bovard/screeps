@@ -3,6 +3,7 @@ import { Constants } from "../Constants";
 
 export class Builder extends BaseCreep {
     public static run(creep: Creep, roomOb: RoomObservation): Optional<number> {
+        console.log("Looking Builder")
         const res = BaseCreep.run(creep, roomOb)
         if (res !== undefined) {
             return res
@@ -10,8 +11,13 @@ export class Builder extends BaseCreep {
         return this.build(creep)
     }
     private static build(creep: Creep): Optional<number> {
+        if (creep.memory.building === undefined) {
+            creep.memory.building = false
+            creep.say('🔄 collect to build');
+        }
         if (creep.memory.building && creep.carry.energy === 0) {
             creep.memory.building = false;
+            BaseCreep.resetSourceCache(creep)
             creep.say('🔄 collect to build');
         }
         if (!creep.memory.building && creep.carry.energy === creep.carryCapacity) {

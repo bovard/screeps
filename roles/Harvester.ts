@@ -3,6 +3,7 @@ import { Constants } from "../Constants";
 
 export class Harvester extends BaseCreep {
     public static run(creep: Creep, roomOb: RoomObservation): Optional<number> {
+        console.log("Looking Harvester")
         const res = BaseCreep.run(creep, roomOb)
         if (res !== undefined) {
             return res
@@ -10,6 +11,11 @@ export class Harvester extends BaseCreep {
         return this.harvest(creep)
     }
     private static harvest(creep: Creep): Optional<number> {
+        if (creep.memory.harvesting === undefined) {
+            creep.memory.harvesting = true
+            BaseCreep.resetSourceCache(creep)
+            creep.say('🔄 harvest')
+        }
         if (!creep.memory.harvesting && creep.carry.energy === 0) {
             creep.memory.harvesting = true
             BaseCreep.resetSourceCache(creep)

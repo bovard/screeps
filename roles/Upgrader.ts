@@ -3,6 +3,7 @@ import { Constants } from "../Constants";
 
 export class Upgrader extends BaseCreep {
     public static run(creep: Creep, roomOb: RoomObservation): Optional<number> {
+        console.log("Looking upgrader")
         const res = BaseCreep.run(creep, roomOb)
         if (res !== undefined) {
             return res
@@ -10,6 +11,11 @@ export class Upgrader extends BaseCreep {
         return this.upgrade(creep)
     }
     public static upgrade(creep: Creep): Optional<number> {
+        if (creep.memory.upgrading === undefined) {
+            creep.memory.upgrading = false
+            BaseCreep.resetSourceCache(creep)
+            creep.say('🔄 collecting to upgrade')
+        }
         if (creep.memory.upgrading && creep.carry.energy === 0) {
             creep.memory.upgrading = false
             BaseCreep.resetSourceCache(creep)

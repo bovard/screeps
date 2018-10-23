@@ -1,8 +1,26 @@
+import { Constants } from "Constants";
+
 export class BaseCreep {
     public static run(creep: Creep, roomObs: RoomObservation) {
         this.pickUpTombstone(creep, roomObs)
         this.repairRoad(creep, roomObs)
         this.pickUpDroppedEnergy(creep, roomObs)
+    }
+    public static resetOthers(creep: Creep, typeRan: string) {
+        switch (typeRan) {
+            case Constants.TYPE_BUILDER:
+                delete creep.memory.harvesting
+                delete creep.memory.upgrading
+                return
+            case Constants.TYPE_HARVESTER:
+                delete creep.memory.building
+                delete creep.memory.upgrading
+                return
+            case Constants.TYPE_UPGRADER:
+                delete creep.memory.building
+                delete creep.memory.harvesting
+                return
+        }
     }
     private static repairRoad(creep: Creep, roomObs: RoomObservation) {
         roomObs.roads.forEach(road => {
@@ -24,7 +42,14 @@ export class BaseCreep {
                 }
             })
     }
-
+    public static dumbMoveWithRoad(creep: Creep, target: RoomPosition): Optional<number> {
+        if (creep.pos.isEqualTo(target)) {
+            return undefined
+        }
+        const targetDir = creep.pos.getDirectionTo(target);
+        // if (creep.room.lookForAt(LOOK_STRUCTURES))
+        return undefined;
+    }
     private static pickUpTombstone(creep: Creep, roomObs: RoomObservation) {
         if (creep.carry.energy === creep.carryCapacity) {
             return;
