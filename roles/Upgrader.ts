@@ -3,7 +3,6 @@ import { Constants } from "../Constants";
 
 export class Upgrader extends BaseCreep {
     public static run(creep: Creep, roomOb: RoomObservation): Optional<number> {
-        console.log("Looking upgrader")
         const res = BaseCreep.run(creep, roomOb)
         if (res !== undefined) {
             return res

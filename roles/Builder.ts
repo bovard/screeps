@@ -3,7 +3,6 @@ import { Constants } from "../Constants";
 
 export class Builder extends BaseCreep {
     public static run(creep: Creep, roomOb: RoomObservation): Optional<number> {
-        console.log("Looking Builder")
         const res = BaseCreep.run(creep, roomOb)
         if (res !== undefined) {
             return res

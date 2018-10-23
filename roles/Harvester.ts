@@ -3,7 +3,6 @@ import { Constants } from "../Constants";
 
 export class Harvester extends BaseCreep {
     public static run(creep: Creep, roomOb: RoomObservation): Optional<number> {
-        console.log("Looking Harvester")
         const res = BaseCreep.run(creep, roomOb)
         if (res !== undefined) {
             return res
